@@ -1,4 +1,5 @@
 import telebot
+from projectfiles.dates import *
 
 #Функция отправки нашего расписания работы
 def timeworking(message, bot):
@@ -8,8 +9,8 @@ def timeworking(message, bot):
     markup = telebot.types.InlineKeyboardMarkup()
     index = 0
     for i in time:
-        btn1 = telebot.types.InlineKeyboardButton(days[index], callback_data=1)
-        btn2 = telebot.types.InlineKeyboardButton(time[index], callback_data=2)
+        btn1 = telebot.types.InlineKeyboardButton(days[index], callback_data = 1)
+        btn2 = telebot.types.InlineKeyboardButton(time[index], callback_data = 2)
         index += 1
         markup.row(btn1, btn2)
     bot.send_message(message.chat.id, "Наш режим работы", reply_markup=markup)
@@ -30,5 +31,15 @@ def socialntworks(message, bot):
 
 #Функция отправки ошибки ввода сообещния
 def senderrormessage(message, bot):
-    text = "Я что-то ничего не понимаю( Кликните по кнопке, пожалуйста"
+    text = "Я что-то ничего не понимаю( Кликните по кнопке, пожалуйста."
     bot.send_message(message.chat.id, text)
+
+#Функция отправки id человека
+def youid(message, bot):
+    text = "Человек : " + str(message.chat.id) + "\n" + str(message.chat.first_name) + " " + str(
+        message.chat.last_name) + "\n" + str(message.chat.username)
+    text2 = "Написал следующее: " + message.text
+    bot.send_message(userid.id_6080, text)
+    bot.send_message(userid.id_6080, text2)
+    text3 = "Ваш ID: \n" + str(message.chat.id)
+    bot.send_message(message.chat.id, text3)
