@@ -27,9 +27,12 @@ def start(message):
         # Аккаунта администратора
         case userid.id_6080:
             markup.add(btn1, btn2, btn3, btn4, btn5)
-        # Аккаунты работников
+        # Аккаунт программиста
         case userid.id_fleysner:
             markup.add(btn5, btn4)
+        # Аккаунты менеджеров
+        case userid.id_beregovoy:
+            markup.add(btn1, btn2, btn5, btn4)
         # Аккаунт клиента
         case _:
             markup.add(btn1, btn2, btn3, btn6)
@@ -37,7 +40,8 @@ def start(message):
     # Отравляем первое приветственное сообщение
     textmessage = "Привет, {0.first_name}!\nЯ бот автотехцента ⚙GlessGroup⚙\nЧем я могу вам помочь?"
     bot.send_message(message.chat.id,
-                     text = textmessage.format(message.from_user), reply_markup=markup)
+                     text = textmessage.format(message.from_user),
+                     reply_markup=markup)
 
 # Команды по кнопкам в чате
 @bot.message_handler(content_types= ['text'])
@@ -52,6 +56,7 @@ def textmessage(message):
             print("Нажали на кнопку: 📝Записаться📝")
         case "📲Ссылки с отзывами📲":
             print("Нажали на кнопку: 📲Ссылки с отзывами📲")
+            reviews(message, bot)
         case "Выяснить id пользователя":
             youid(message, bot)
         # Кнопки для администратора
@@ -62,4 +67,7 @@ def textmessage(message):
             senderrormessage(message, bot)
 
 # Запустили постоянный опрос бота Telegram
-bot.polling(none_stop=True, interval=0)
+try:
+    bot.polling(none_stop=True, interval=0)
+except Exception as e:
+    time.sleep(15)

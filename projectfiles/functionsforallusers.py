@@ -34,6 +34,10 @@ def senderrormessage(message, bot):
     text = "Я что-то ничего не понимаю( Кликните по кнопке, пожалуйста."
     bot.send_message(message.chat.id, text)
 
+#Функция отправки ссылок на наши отзывы
+def reviews(message, bot):
+    print("Ссылки с отзывами")
+
 #Функция отправки id человека
 def youid(message, bot):
     text = "Человек : " + str(message.chat.id) + "\n" + str(message.chat.first_name) + " " + str(
