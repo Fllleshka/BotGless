@@ -1,7 +1,6 @@
-from telebot import *
-
 from projectfiles.functionsforallusers import *
 from projectfiles.functionsforadmin import *
+
 # Токен для связи с ботом
 bot = telebot.TeleBot(botkey)
 
@@ -35,7 +34,7 @@ def start(message):
             markup.add(btn1, btn2, btn5, btn4)
         # Аккаунт клиента
         case _:
-            markup.add(btn1, btn2, btn3, btn6)
+            markup.add(btn1, btn2, btn3, btn5, btn6)
 
     # Отравляем первое приветственное сообщение
     textmessage = "Привет, {0.first_name}!\nЯ бот автотехцента ⚙GlessGroup⚙\nЧем я могу вам помочь?"
@@ -53,9 +52,8 @@ def textmessage(message):
         case "🖥Наши социальные сети🖥":
             socialntworks(message, bot)
         case "📝Записаться📝":
-            print("Нажали на кнопку: 📝Записаться📝")
+            serviserecord(message, bot)
         case "📲Ссылки с отзывами📲":
-            print("Нажали на кнопку: 📲Ссылки с отзывами📲")
             reviews(message, bot)
         case "Выяснить id пользователя":
             youid(message, bot)
@@ -66,8 +64,15 @@ def textmessage(message):
             print(message.text)
             senderrormessage(message, bot)
 
-# Запустили постоянный опрос бота Telegram
-try:
-    bot.polling(none_stop=True, interval=0)
-except Exception as e:
-    time.sleep(15)
+# Класс времён
+class times:
+    today = datetime.datetime.today()
+    timetoScan = today.strftime("%H:%M")
+
+while True:
+    try:
+        # Запустили постоянный опрос бота Telegram
+        bot.polling(none_stop=True, interval=0)
+    except Exception as e:
+        print(e)
+        time.sleep(15)
