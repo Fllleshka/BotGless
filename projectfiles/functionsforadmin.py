@@ -2,6 +2,8 @@ from projectfiles.dates import *
 from telebot import *
 import requests
 import datetime
+# Импорт баблиотеки для работы в APIGoogle
+import gspread
 
 # Функция редактирования call-центра
 def changecallcener(message, bot):
@@ -65,12 +67,28 @@ def changecallcener(message, bot):
 
 # Функция логгирования действий
 def logger(firstname, lastname, name, status):
-
-    print("\tНомер строки: ")
-    print("\tВремя действия: ")
-    print("\tКто:\t", firstname, lastname)
-    print("\tМенеджер:\t", name)
-    print("\tСтатус:\t", status)
+    # Подключаемся к сервисному аккаунту
+    gc = gspread.service_account(CREDENTIALS_FILE)
+    # Подключаемся к таблице по ключу таблицы
+    table = gc.open_by_key(sheetkey)
+    # Открываем нужный лист
+    worksheet = table.worksheet("LogsCallCenterBot")
+    # Получаем данные с листа
+    dates = worksheet.get_values()
+    # Получаем номер самой последней строки
+    newstr = len(worksheet.col_values(1)) + 1
+    # Вычисляем номер строки
+    newnumber = newstr - 1
+    # Определяем время выполения операции
+    today = datetime.datetime.today().strftime("%d.%m.%Y | %H:%M:%S")
+    # Формираем данные человека который нажал кнопку
+    resultname = firstname + " " + lastname
+    # Добавляем строку в конец фаила логгирования
+    worksheet.update_cell(newstr, 1, newnumber)
+    worksheet.update_cell(newstr, 2, today)
+    worksheet.update_cell(newstr, 3, resultname)
+    worksheet.update_cell(newstr, 4, name)
+    worksheet.update_cell(newstr, 5, status)
 
 # Функция инверсии статуса
 def changestatus(statusnow, numbermanager):
