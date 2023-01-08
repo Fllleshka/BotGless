@@ -101,3 +101,36 @@ def changestatus(statusnow, numbermanager):
         urlforapi = urlapi + numbermanager + '/agent'
         result = requests.put(urlforapi, params = paramoffline, headers = headers)
     return text_for_callback
+
+# Функция отключения всех в Call центре
+def offcallcenter(message, bot):
+    today = datetime.datetime.today()
+    todaytime = today.strftime("%H:%M:%S")
+    print(todaytime, "[", message.chat.first_name, message.chat.last_name, "] нажал на кнопку [Выключить Call-центр]")
+    for element in numbermanagers:
+        urlforapi = urlapi + str(element) + '/agent'
+        requests.put(urlforapi, params = paramoffline, headers=headers)
+    text = "Все телефоны выключены"
+    bot.send_message(message.chat.id, text)
+    # Подключаемся к сервисному аккаунту
+    gc = gspread.service_account(CREDENTIALS_FILE)
+    # Подключаемся к таблице по ключу таблицы
+    table = gc.open_by_key(sheetkey)
+    # Открываем нужный лист
+    worksheet = table.worksheet("LogsCallCenterBot")
+    # Получаем данные с листа
+    dates = worksheet.get_values()
+    # Получаем номер самой последней строки
+    newstr = len(worksheet.col_values(1)) + 1
+    # Вычисляем номер строки
+    newnumber = newstr - 1
+    # Определяем время выполения операции
+    today = datetime.datetime.today().strftime("%d.%m.%Y | %H:%M:%S")
+    # Формираем данные человека который нажал кнопку
+    resultname = message.chat.first_name + " " + message.chat.last_name
+    # Добавляем строку в конец фаила логгирования
+    worksheet.update_cell(newstr, 1, newnumber)
+    worksheet.update_cell(newstr, 2, today)
+    worksheet.update_cell(newstr, 3, resultname)
+    worksheet.update_cell(newstr, 4, "ALL")
+    worksheet.update_cell(newstr, 5, "OFFLINE")

@@ -17,6 +17,7 @@ def start(message):
     # Кнопки для администратора
     btn4 = types.KeyboardButton("☎Отредактировать call-центр☎")
     btn6 = types.KeyboardButton("Выяснить id пользователя")
+    btn7 = types.KeyboardButton("Выключить Call-центр")
     # Общие кнопки
 
 
@@ -25,10 +26,10 @@ def start(message):
     match id:
         # Аккаунта администратора
         case userid.id_6080:
-            markup.add(btn1, btn2, btn3, btn4, btn5)
+            markup.add(btn1, btn2, btn3, btn4, btn5, btn7)
         # Аккаунт программиста
         case userid.id_fleysner:
-            markup.add(btn5, btn4)
+            markup.add(btn5, btn4, btn7)
         # Аккаунты менеджеров
         case userid.id_beregovoy:
             markup.add(btn1, btn2, btn5, btn4)
@@ -60,6 +61,8 @@ def textmessage(message):
         # Кнопки для администратора
         case "☎Отредактировать call-центр☎":
             changecallcener(message, bot)
+        case "Выключить Call-центр":
+            offcallcenter(message, bot)
         case _:
             print(message.text)
             senderrormessage(message, bot)
